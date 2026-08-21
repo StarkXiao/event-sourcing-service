@@ -3,7 +3,13 @@ package eventstore
 import (
 	"context"
 	"event-sourcing-service/internal/domain"
+	"time"
 )
+
+func WaitForProjection(ctx context.Context) error {
+	time.Sleep(100 * time.Millisecond)
+	return nil
+}
 
 type Store interface {
 	Load(context.Context, string, string, string) ([]domain.Event, error)
