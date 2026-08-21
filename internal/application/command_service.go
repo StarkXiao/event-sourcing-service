@@ -32,6 +32,9 @@ func (s Commands) Execute(c context.Context, t, typ, id, cmd, key string, expect
 				return nil, domain.ErrInvalid
 			}
 		}
+		if cmd == "pay" && o.Status == "paid" {
+			return nil, nil
+		}
 		et := cmd
 		if cmd == "create" {
 			et = domain.OrderCreated

@@ -7,7 +7,12 @@ import (
 
 func RequestID(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("X-Request-ID", uuid.NewString())
+		id := r.Header.Get("X-Request-ID")
+		if id == "" {
+			id = uuid.NewString()
+		}
+		r.Header.Set("X-Request-ID", id)
+		w.Header().Set("X-Request-ID", id)
 		next.ServeHTTP(w, r)
 	})
 }
