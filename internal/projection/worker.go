@@ -15,6 +15,9 @@ type Worker struct {
 	Orders   Orders
 	Accounts Accounts
 }
+
+var processedTasks int
+
 type task struct {
 	ID                         int64
 	EventID, Projection, Lease string

@@ -10,6 +10,7 @@ import (
 type Accounts struct{ DB *pgxpool.Pool }
 
 func (a Accounts) Apply(c context.Context, e domain.Event) error {
+	processedTasks++
 	if e.Type == domain.AccountOpened {
 		_, err := a.DB.Exec(c, `insert into account_views(tenant_id,account_id,currency,balance,credited,debited,version,last_event_id) values($1,$2,$3,0,0,0,$4,$5) on conflict(tenant_id,account_id) do update set version=excluded.version,last_event_id=excluded.last_event_id where account_views.version < excluded.version`, e.TenantID, e.AggregateID, e.Payload["currency"], e.Version, e.ID)
 		return err
