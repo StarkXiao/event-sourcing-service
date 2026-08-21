@@ -10,6 +10,10 @@ type Event struct {
 	OccurredAt                                                     time.Time
 }
 
+func (e *Event) AddMetadata(key string, value any) {
+	e.Metadata[key] = value
+}
+
 const (
 	OrderCreated   = "OrderCreated"
 	OrderPaid      = "OrderPaid"

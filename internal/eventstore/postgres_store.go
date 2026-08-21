@@ -106,7 +106,7 @@ func (p Postgres) Append(c context.Context, r AppendRequest) ([]domain.Event, er
 		v.IdempotencyKey = fmt.Sprintf("%s:%s", r.IdempotencyKey, v.ID)
 		v.OccurredAt = time.Now().UTC()
 		if v.Metadata == nil {
-			v.Metadata = map[string]any{}
+			v.AddMetadata("source", "eventstore")
 		}
 		a, marshalErr := json.Marshal(v.Payload)
 		if marshalErr != nil {
