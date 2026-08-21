@@ -8,6 +8,10 @@ import (
 
 type Queries struct{ Store eventstore.Store }
 
+func (q Queries) ProjectionLag(required int64) error {
+	return domain.ProjectionLagError(required)
+}
+
 func (q Queries) Events(c context.Context, t, typ, id string) ([]domain.Event, error) {
 	return q.Store.Load(c, t, typ, id)
 }
