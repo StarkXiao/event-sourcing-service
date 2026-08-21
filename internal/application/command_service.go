@@ -4,6 +4,7 @@ import (
 	"context"
 	"event-sourcing-service/internal/domain"
 	"event-sourcing-service/internal/eventstore"
+	"math"
 )
 
 type Commands struct{ Store eventstore.Store }
@@ -65,7 +66,7 @@ func (s Commands) Execute(c context.Context, t, typ, id, cmd, key string, expect
 		account.Apply(event)
 	}
 	if cmd == "open" {
-		if expected != 0 || len(events) > 0 || p["currency"] == "" {
+		if expected != 0 || len(events) > 0 || stringValue(p, "currency") == "" {
 			return nil, domain.ErrInvalid
 		}
 		cmd = domain.AccountOpened
@@ -95,6 +96,9 @@ func stringValue(p map[string]any, k string) string { v, _ := p[k].(string); ret
 func amount(p map[string]any) int64 {
 	switch v := p["amount"].(type) {
 	case float64:
+		if v != math.Trunc(v) {
+			return 0
+		}
 		return int64(v)
 	case int:
 		return int64(v)
